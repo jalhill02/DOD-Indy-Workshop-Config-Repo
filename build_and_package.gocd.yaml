@@ -4,10 +4,11 @@ pipelines:
     group: kubernetes
     display_order: 1
     environment_variables:
-      DOCKERHUB_USERNAME: jalhill02
+      DOCKERHUB_USERNAME: kmugrage
     materials:
       git:
-        git: https://github.com/jalhill02/node-bulletin-board
+        git: https://github.com/kmugrage/node-bulletin-board.git
+        shallow_clone: true
     stages:
     - build_stage:
         # This can be set to manual if desired
@@ -30,3 +31,15 @@ pipelines:
                 - -c
                 - docker build -t $DOCKERHUB_USERNAME/bulletin-board:$GO_PIPELINE_LABEL . -f Dockerfile.application
                 command: /bin/bash
+    - test_stage:
+        approval:
+          type: success
+        jobs:
+          test_image:
+            elastic_profile_id: demo-app
+            tasks:
+            - exec:
+                command: /bin/bash
+                arguments:
+                - -c
+                - docker run -t $DOCKERHUB_USERNAME/bulletin-board:$GO_PIPELINE_LABEL npm test
