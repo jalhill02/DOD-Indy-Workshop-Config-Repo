@@ -7,7 +7,7 @@ pipelines:
       DOCKERHUB_USERNAME: jalhill02
     materials:
       git:
-        git: # https://github.com/jalhill02/node-bulletin-boardtrue
+        git:https://github.com/jalhill02/node-bulletin-boardtrue
     stages:
     - build_stage:
         # This can be set to manual if desired
