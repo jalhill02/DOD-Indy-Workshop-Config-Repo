@@ -1,6 +1,6 @@
 format_version: 4
 pipelines:
-  deploy_to_uat_two:
+  deploy_to_uat_one:
     group: kubernetes
     display_order: 4
     environment_variables:
