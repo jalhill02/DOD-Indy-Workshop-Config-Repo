@@ -1,13 +1,13 @@
-format_version: 4
+alhilformat_version: 4
 pipelines:
   build_and_package:
     group: kubernetes
     display_order: 1
     environment_variables:
-      DOCKERHUB_USERNAME: kmugrage
+      DOCKERHUB_USERNAME: jalhill02
     materials:
       git:
-        git: https://github.com/kmugrage/node-bulletin-board.git
+        git: https://github.com/jalhill02/node-bulletin-board.git
         shallow_clone: true
     stages:
     - build_stage:
