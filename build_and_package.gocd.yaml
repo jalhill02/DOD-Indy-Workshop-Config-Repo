@@ -4,7 +4,7 @@ pipelines:
     group: kubernetes
     display_order: 1
     environment_variables:
-      DOCKERHUB_USERNAME: # YOUR VALUE
+      DOCKERHUB_USERNAME: jalhill02
     materials:
       git:
         git: # YOUR VALUE
