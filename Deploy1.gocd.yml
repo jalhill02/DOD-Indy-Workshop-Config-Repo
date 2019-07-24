@@ -1,0 +1,36 @@
+format_version: 4
+pipelines:
+  deploy_to_prod:
+    group: kubernetes
+    display_order: 3
+    environment_variables:
+      NAMESPACE: gocd
+      KUBE_TOKEN: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLTR2cDQ1Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJlNGNhNDY5MS1hZTM0LTExZTktOGVmMS00MjAxMGE4MDAwZTYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.Q1VanUrOIKAWb4uvxHG6Ptp-gq8kI4upsxHFWr-0na73oeILNL5Pcn5C2hQ9kiSOv0h3nxnNtpb2OTs0ybWX-6fgOriKVSvtJQUfZWp6VfopIBt9MN0KYXJdvifGV_bHgHeZPWZLgydjnSNJfpcMJNWpq5Xtxm9TimsvGhyN-bwK-zOcMNwMSWB1MEwGLtj6bsxcFehNiJ1pjx3vkIXttsyGCfD8rsng49jQhjcczFCwLji_A28kR_oqNfJrmYJ1AXKP67zmsErlXaU4RMCxSSe-tRGazJD7NHn72Mu3wDC3lNARfavHArIbWcf74m1gQWXw4dZGXmJ_wvQm-Lkfog
+      build:
+        pipeline: build_and_package
+        stage: test_stage
+      SourceCodeRepo:
+        git: https://github.com/jalhill02/node-bulletin-board.git
+        shallow_clone: false
+    stages:
+    - deploy_to_prod:
+        approval:
+          type: success
+        jobs:
+          deploy:
+            elastic_profile_id: demo-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_package
+                stage: build_stage
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                command: ./app-deployment.sh
+                arguments:
+                run_if: passed
